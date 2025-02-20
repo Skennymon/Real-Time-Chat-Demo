@@ -7,11 +7,10 @@ const socket = io("http://localhost:3000/");
 function App() {  
   const[messages, setMessages] = useState([""]);
   const[currentTypedMessage, setCurrentTypedMessage] = useState("");
-  const id = `User ${socket.id.charAt(0)}: `;
   const handleSubmit = (e) => {
     e.preventDefault(); // This prevents the page from reloading everytime we submit
     setMessages([...messages, currentTypedMessage]);
-    socket.emit("updateMessage", [...messages, id + currentTypedMessage]);
+    socket.emit("updateMessage", [...messages, `User ${socket.id.charAt(0)}: ` + currentTypedMessage]);
     setCurrentTypedMessage("");
     console.log(messages);
     
@@ -20,6 +19,10 @@ function App() {
   socket.on("receiveArray", (dataArray) => {
     setMessages(dataArray);
   });
+
+  useEffect(() => {
+    socket.emit("getMessages");
+  }, [])
 
   return (
     <>

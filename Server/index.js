@@ -23,10 +23,15 @@ io.on("connection", (socket) => {
     });
 
     socket.on("updateMessage", (inputtedArray) => {
+        dataArray = inputtedArray;
         console.log("Received Array");
         console.log(inputtedArray);
         io.emit("receiveArray", inputtedArray);
     });
+
+    socket.on("getMessages", () => {
+        io.emit("receiveArray", dataArray);
+    })
 });
 
 server.listen(3000, () => {
